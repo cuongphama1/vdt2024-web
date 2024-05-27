@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VDT2024 Student Management</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Danh sách sinh viên VDT2024</h1>
+    <table id="studentTable">
+        <thead>
+            <tr>
+                <th>Họ và tên</th>
+                <th>Giới tính</th>
+                <th>Trường đang theo học</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be populated by JavaScript -->
+        </tbody>
+    </table>
+    <h2>Thêm/Cập nhật sinh viên</h2>
+    <form id="studentForm">
+        <input type="hidden" id="studentId">
+        <label for="name">Họ và tên:</label>
+        <input type="text" id="name" required>
+        <label for="gender">Giới tính:</label>
+        <input type="text" id="gender" required>
+        <label for="school">Trường đang theo học:</label>
+        <input type="text" id="school" required>
+        <button type="submit">Lưu</button>
+        <button type="button" id="resetForm">Reset</button>
+    </form>
+
+    
+
+    <script src="scripts.js"></script>
+</body>
+</html>
