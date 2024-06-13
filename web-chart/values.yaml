@@ -1,19 +1,9 @@
 replicaCount: 1
 
 image:
-  repository: cuong111111/web
-  tag: latest
+  repository: nthhaf/hant-web-service
   pullPolicy: IfNotPresent
+  tag: latest
 
 service:
-  type: NodePort
-  port: 80
-  nodePort: 30002
-
-ingress:
-  enabled: false
-
-resources: {}
-nodeSelector: {}
-tolerations: []
-affinity: {}
+  nodePort: 30001

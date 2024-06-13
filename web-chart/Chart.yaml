@@ -1,6 +1,5 @@
 apiVersion: v2
-name: web-chart
-description: A Helm chart for Kubernetes Web deployment
-
+name: web
+description: A Helm chart for K8S
 version: 0.1.0
 appVersion: "1.0"
