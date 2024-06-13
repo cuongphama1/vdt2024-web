@@ -1,17 +1,11 @@
-# Use an official Node.js runtime as a parent image
-FROM node:lts-alpine AS build
+# Sử dụng nginx image
+FROM nginx:alpine
 
-# Set the working directory
-WORKDIR /app
+# Copy nội dung thư mục public vào thư mục phục vụ của nginx
+COPY public /usr/share/nginx/html
 
-# Copy the current directory contents into the container at /app
-COPY . .
+# Expose cổng mà nginx sử dụng
+EXPOSE 80
 
-# Install http-server globally
-RUN npm install -g http-server
-
-# Expose the port http-server will run on
-EXPOSE 8080
-
-# Run http-server to serve the web content
-CMD ["http-server", "-c-1", "public/"]
+# Lệnh để khởi động nginx
+CMD ["nginx", "-g", "daemon off;"]
