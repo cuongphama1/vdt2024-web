@@ -1,9 +1,10 @@
-replicaCount: 1
+# api-chart/values.yaml
 
 image:
-  repository: nthhaf/hant-web-service
+  repository: cuong111111/web
+  tag: "latest"
   pullPolicy: IfNotPresent
-  tag: latest
 
 service:
   nodePort: 30001
+
