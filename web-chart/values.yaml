@@ -2,7 +2,7 @@
 
 image:
   repository: cuong111111/web
-  tag: "v1.2"
+  tag: "v1.4"
   pullPolicy: IfNotPresent
 
 service:
