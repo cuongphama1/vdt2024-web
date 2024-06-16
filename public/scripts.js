@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const apiUrl = 'http://localhost:5000/api/students';
+    const apiUrl = '172.31.11.214:30002';
 
     const studentTable = document.getElementById('studentTable').getElementsByTagName('tbody')[0];
     const studentForm = document.getElementById('studentForm');
