@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const apiUrl = 'http://172.31.11.214:30002/api/students';
+    const apiUrl = 'http://3.106.244.188:30002/api/students';
     const urlParams = new URLSearchParams(window.location.search);
     const studentId = urlParams.get('id');
 
