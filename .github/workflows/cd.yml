@@ -30,8 +30,8 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t cuong111111/web:${{ env.TAG }} . # Xây dựng hình ảnh Docker với thẻ đã trích xuất
-          docker push cuong111111/web:${{ env.TAG }} # Đẩy hình ảnh Docker lên Docker Hub
+          docker build -t cuong111111/web:${{ env.TAG }} . 
+          docker push cuong111111/web:${{ env.TAG }} 
 
       - name: Checkout config repository
         uses: actions/checkout@v3 # Kiểm tra mã nguồn của repository khác
