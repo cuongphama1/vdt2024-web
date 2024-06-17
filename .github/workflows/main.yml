@@ -6,7 +6,7 @@ jobs:
   build-and-deploy: # Định nghĩa công việc (job)
     permissions:
       contents: write # Cấp quyền ghi cho nội dung của repository
-    runs-on: ubuntu-latest # Sử dụng runner Ubuntu mới nhất
+    runs-on: ubuntu-latest 
 
     steps:
       - name: Checkout repository
