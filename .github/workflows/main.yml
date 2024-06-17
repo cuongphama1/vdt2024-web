@@ -1,9 +1,6 @@
 name: Deploy # Tên của workflow
 
-on:
-  push:
-    tags:
-      - '*' # Kích hoạt workflow khi có bất kỳ thẻ (tag) nào được đẩy lên
+on: push
 
 jobs:
   build-and-deploy: # Định nghĩa công việc (job)
