@@ -27,6 +27,7 @@ jobs:
 
       - name: Build and push Docker image
         run: |
+          TAG=${GITHUB_REF#refs/tags/}
           docker build -t cuong111111/web:${{ env.TAG }} . 
           docker push cuong111111/web:${{ env.TAG }} 
 
