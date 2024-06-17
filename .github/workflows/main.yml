@@ -20,6 +20,9 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }} # Sử dụng tên đăng nhập Docker Hub từ secrets
           password: ${{ secrets.DOCKER_PASSWORD }} # Sử dụng mật khẩu Docker Hub từ secrets
+          
+      - name: Print GITHUB_REF
+        run: echo "GITHUB_REF is ${GITHUB_REF}"
 
       - name: Extract tag name
         id: extract_tag # Đặt ID cho bước này để tham chiếu sau này
