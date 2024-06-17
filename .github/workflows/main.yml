@@ -2,7 +2,8 @@ name: Deploy # Tên của workflow
 
 on:
   push:
-
+    tags:
+      - '*'
 
 jobs:
   build-and-deploy: # Định nghĩa công việc (job)
