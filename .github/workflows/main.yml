@@ -24,8 +24,10 @@ jobs:
       - name: Extract tag name
         id: extract_tag # Đặt ID cho bước này để tham chiếu sau này
         run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV # Trích xuất tên thẻ từ ref và thiết lập nó như là một biến môi trường
-
+        if: startsWith(github.ref, 'refs/tags/')
+        
       - name: Build and push Docker image
+        if: env.TAG != ''
         run: |
           docker build -t cuong111111/web:${{ env.TAG }} . 
           docker push cuong111111/web:${{ env.TAG }} 
