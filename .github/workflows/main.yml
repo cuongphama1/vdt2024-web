@@ -1,12 +1,15 @@
 name: Deploy # Tên của workflow
 
-on: push
+on:
+  push:
+    tags:
+      - '*'
 
 jobs:
   build-and-deploy: # Định nghĩa công việc (job)
     permissions:
       contents: write # Cấp quyền ghi cho nội dung của repository
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest # Sử dụng runner Ubuntu mới nhất
 
     steps:
       - name: Checkout repository
@@ -20,16 +23,21 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }} # Sử dụng tên đăng nhập Docker Hub từ secrets
           password: ${{ secrets.DOCKER_PASSWORD }} # Sử dụng mật khẩu Docker Hub từ secrets
-          
+
       - name: Print GITHUB_REF
         run: echo "GITHUB_REF is ${GITHUB_REF}"
 
       - name: Extract tag name
         id: extract_tag # Đặt ID cho bước này để tham chiếu sau này
-        run: 
-          echo "TAG=${GITHUB_REF}"
-          echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV # Trích xuất tên thẻ từ ref và thiết lập nó như là một biến môi trường
-        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          echo "Extracting tag from GITHUB_REF: ${GITHUB_REF}"
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            TAG="${GITHUB_REF#refs/tags/}"
+            echo "TAG=${TAG}" >> $GITHUB_ENV
+            echo "Extracted TAG: ${TAG}"
+          else
+            echo "Not a tag ref: ${GITHUB_REF}"
+          fi
         
       - name: Build and push Docker image
         if: env.TAG != ''
@@ -46,6 +54,11 @@ jobs:
 
       - name: Commit and push changes
         run: |
+          if [[ -z "${{ env.TAG }}" ]]; then
+            echo "TAG is empty, skipping commit and push."
+            exit 1
+          fi
+
           git clone https://user:$GITHUB_TOKEN@github.com/cuongphama1/web-config 
           cd web-config 
 
@@ -62,4 +75,4 @@ jobs:
           git push --set-upstream origin main 
           git push --set-upstream https://user:$GITHUB_TOKEN@github.com/cuongphama1/web-config main 
         env:
-          GITHUB_TOKEN: ${{ secrets.WEB_TOKEN }} # Sử dụng GitHub token từ secrets để xác thực
+          GITHUB_TOKEN: ${{ secrets.WEB_TOKEN }}
