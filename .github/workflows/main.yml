@@ -1,17 +1,61 @@
-name: Super-Linter
+name: Deploy # Tên của workflow
 
-on: push
+on:
+  push:
+    tags:
+      - '*' # Kích hoạt workflow khi có bất kỳ thẻ (tag) nào được đẩy lên
 
 jobs:
-  super-lint:
-    name: Lint code base
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+  build-and-deploy: # Định nghĩa công việc (job)
+    permissions:
+      contents: write # Cấp quyền ghi cho nội dung của repository
+    runs-on: ubuntu-latest # Sử dụng runner Ubuntu mới nhất
 
-      - name: Run Super-Linter
-        uses: github/super-linter@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3 # Kiểm tra mã nguồn của repository
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2 # Cài đặt Docker Buildx để xây dựng hình ảnh đa nền tảng
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2 # Đăng nhập vào Docker Hub
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }} # Sử dụng tên đăng nhập Docker Hub từ secrets
+          password: ${{ secrets.DOCKER_PASSWORD }} # Sử dụng mật khẩu Docker Hub từ secrets
+
+      - name: Extract tag name
+        id: extract_tag # Đặt ID cho bước này để tham chiếu sau này
+        run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV # Trích xuất tên thẻ từ ref và thiết lập nó như là một biến môi trường
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t cuong111111/web:${{ env.TAG }} . 
+          docker push cuong111111/web:${{ env.TAG }} 
+
+      - name: Checkout config repository
+        uses: actions/checkout@v3 # Kiểm tra mã nguồn của repository khác
+        with:
+          repository: cuongphama1/web-config # Repository cần kiểm tra
+          token: ${{ secrets.GITHUB_TOKEN }} # Sử dụng GitHub token từ secrets để xác thực
+          path: . # Kiểm tra vào thư mục hiện tại
+
+      - name: Commit and push changes
+        run: |
+          git clone https://user:$GITHUB_TOKEN@github.com/cuongphama1/web-config 
+          cd web-config 
+
+          git config --global user.name 'GitHub Actions' 
+          git config --global user.email 'cuongphamhsgs@gmail.com' 
+
+          sed -i "s/^  tag: .*/  tag: ${{ env.TAG }}/" values.yaml 
+
+          git add values.yaml # Thêm thay đổi vào staging
+          git commit -m "Update image version to ${{ env.TAG }}"
+
+          git remote -v 
+
+          git push --set-upstream origin main 
+          git push --set-upstream https://user:$GITHUB_TOKEN@github.com/cuongphama1/web-config main 
         env:
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.WEB_TOKEN }} # Sử dụng GitHub token từ secrets để xác thực
